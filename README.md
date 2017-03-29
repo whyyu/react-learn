@@ -19,9 +19,9 @@
 	<script src="react-dom.js"></script>
 	<script src="browser.js"></script>
 	<script type="text/babel">
+//顶层元素只能有一个标签		
 
-
-		ReactDOM.render(
+ReactDOM.render(
 		<h1>hello <span>world</span></h1>,
 		document.getElementById('app')
 		);
