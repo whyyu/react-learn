@@ -16,7 +16,7 @@
 	<script src="react-dom.js"></script>
 	<script src="browser.js"></script>
 	<script type="text/babel">
-		var MessageBox=React.createClass({
+		var MessageBox=React.createClass({//标签名必须大写
 		render:function(){
 		return (
 		<div>hello world</div>
