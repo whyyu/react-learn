@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>react学习state</title>
+	<style>
+	#app{
+		background: #ccc;
+	}
+	</style>
+</head>
+<body>
+
+
+
+	<div id="app"></div>
+
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="browser.js"></script>
+	<script type="text/babel">
+		var Child=React.createClass({
+			render:function(){
+				return (
+					<div>child{this.props.str}</div>
+				);
+			}
+		});
+		var Parent=React.createClass({
+			
+			render:function(){
+			var str= 'hello';
+				return (
+					<div><Child str={str}/> parent</div>
+				);
+			}
+		});
+		ReactDOM.render(
+			<Parent/>,
+			document.getElementById('app')
+					);
+
+	</script>
+</body>
+</html>
