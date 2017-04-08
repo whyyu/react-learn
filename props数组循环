@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>react学习state</title>
+	<style>
+	#app{
+		background: #ccc;
+	}
+	</style>
+</head>
+<body>
+	<div id="app"></div>
+
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="browser.js"></script>
+	<script type="text/babel">
+			var Child=React.createClass({
+			render:function(){
+			var arr1=[];
+				this.props.arr.forEach(function(value,index){
+					arr1.push(<div key={index}>{value}</div>);
+				});
+				return (
+					<div>child{arr1}</div>
+				);
+			}
+		});
+		var Parent=React.createClass({
+			
+			render:function(){
+			var arr=[1,2,3] ;
+				return (
+					<div><Child arr={arr}/> parent</div>
+				);
+			}
+		});
+		ReactDOM.render(
+			<Parent/>,
+			document.getElementById('app')
+					);
+	</script>
+</body>
+</html>
