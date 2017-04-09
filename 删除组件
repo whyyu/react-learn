@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>react学习state</title>
+	<style>
+	#app{
+		background: #ccc;
+	}
+	</style>
+</head>
+<body>
+
+
+
+	<div id="app"></div>
+
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="browser.js"></script>
+	<script type="text/babel">
+		var Counter=React.createClass({
+			getInitialState:function(){
+				return{
+					message:'data'
+				}
+			},
+			componentWillMount:function(){
+			console.log('componenWillMount');
+				this.setState({
+					message:'data1'
+				})
+			},
+			componentDidMount:function(){
+			console.log('componenDidMount');
+				this.setState({
+					message:'data2'
+				})
+			},
+			kill:function(){
+				ReactDOM.unmountComponentAtNode(document.getElementById('app'));
+			},
+				render:function(){
+				console.log('render');
+					return(
+						<div>{this.state.message}
+							<button onClick={this.kill}>点我移除</button>
+						</div>
+					);
+				}
+			})
+
+	ReactDOM.render(
+		<Counter/>,
+		document.getElementById('app')
+	);
+	</script>
+</body>
+</html>
