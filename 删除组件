@@ -37,6 +37,10 @@
 					message:'data2'
 				})
 			},
+			componentWillUnmount:function(){
+			console.log('componenWillMount');
+				
+			},
 			kill:function(){
 				ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 			},
