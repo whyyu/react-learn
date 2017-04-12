@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>react学习state</title>
+	<title>react学习组件加载顺序</title>
 	<style>
 	#app{
 		background: #ccc;
