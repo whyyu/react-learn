@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>react学习state</title>
+	<title>react学习利用插件传递</title>
 	<style>
 	#app{
 		background: #ccc;
