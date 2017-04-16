@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>react学习照片墙</title>
+	<style>
+  *{
+	margin: 0;
+	padding: 0
+}
+img{
+	border: 0;
+	width: 200px;
+	height: 200px;
+}
+html,body{
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+#photowall{
+	height: 100%;
+	width: 100%;
+}
+.stage{
+	height: 100%;
+	width: 100%;
+	background: #ccc;
+}
+.img-figure{
+	width: 300px;
+	height: 280px;
+	background: #fff;
+	text-align: center;
+	padding-top: 40px;
+	position: absolute;
+	cursor: pointer;
+	-webkit-transition:all 0.8s ease-in-out;
+	transform-style: preserve-3d;: 
+}
+figcaption{
+	margin-top: 20px;
+}
+.is-back{
+	position: absolute;
+	left: 0;
+	top: 0;
+	
+	font-size: 20px;
+	height: 100%;
+	width:100% ;
+	background: #fff;
+	backface-visibility: hidden;
+	transform: rotateY(180deg);
+}
+	</style>
+</head>
+<body>
+	<div id="photowall"></div>
+	<script src="js/react.js"></script>
+	<script src="js/react-dom.js"></script>
+	<script src="js/browser.js"></script>
+	<script src="imgData/imgsrc.js"></script>
+	<script src="component/photoWall.js" type="text/babel">
+(function(){
+	function getRangeRandom(low,high){
+		return Math.ceil(Math.random()*(high-low)+low);
+	};
+	var ImgFigure=React.createClass({
+		handle:function(){
+			if(this.props.isCenter){
+				this.props.inverse();
+			}else{
+				this.props.center();
+			}
+		},
+		render:function(){
+			var styleObj={
+				top:this.props.info.pos.top,
+				left:this.props.info.pos.left,
+				transform:'rotate('+this.props.info.rotate+'deg)'
+			};
+			var imgFigureClassName='img-figure';
+			if(this.props.isInverse){
+				styleObj.transform='rotateY(180deg)';
+			}
+			return (	
+				<figure className="img-figure" style={styleObj} onClick={this.handle}>
+					<img src={'img/'+this.props.data.fileName}/>
+					<figcaption>
+						<h3>{this.props.data.title}</h3>
+						<div className='is-back'>{this.props.data.desc}</div>	
+					</figcaption>
+				</figure>
+				);
+		}
+	});
+	
+ 	var Photowall=React.createClass({
+ 		Const:{
+ 			centerPos:{
+ 				top:0,
+ 				left:0
+ 			},
+ 			hRangePos:{
+ 				leftRange:[0,0],
+ 				rightRange:[0,0],
+ 				y:[0,0]
+ 			}
+ 		},
+		getInitialState:function(){
+			return{
+				imginfoArr:[
+					{
+						pos:{
+							top:0,
+							left:0
+						},
+						rotate:0,
+						isCenter:false,
+						isInverse:false
+					}
+				]
+			};
+		},
+		rearrage:function(centerIndex){
+			var imginfoArr=this.state.imginfoArr;
+			imginfoArr[centerIndex].rotate=0;
+			imginfoArr[centerIndex].isCenter=true;
+			var hRangeLR=null;
+			imginfoArr[centerIndex].pos={
+				top:this.Const.centerPos.top,
+				left:this.Const.centerPos.left
+			};
+			for(var i=0;i<imginfoArr.length;i++){
+				if(i==centerIndex){
+					continue;
+				}
+				if(i<imginfoArr.length/2){
+					hRangeLR=this.Const.hRangePos.leftRangeX;
+				}else{
+					hRangeLR=this.Const.hRangePos.rightRangeX;
+				}
+
+				imginfoArr[i].pos={
+					top:getRangeRandom(this.Const.hRangePos.y[0],this.Const.hRangePos.y[1]),
+					left:getRangeRandom(hRangeLR[0],hRangeLR[1])
+				}
+				imginfoArr[i].rotate=getRangeRandom(-30,30);
+				imginfoArr[i].isCenter=false;
+				imginfoArr[i].isInverse=false;
+
+			};
+
+			this.setState({
+				imginfoArr:imginfoArr
+			})
+
+		},
+		center:function(index){
+			return function(){
+				this.rearrage(index);
+			}.bind(this)
+		},
+		inverse:function(index){
+			return function(){
+				this.state.imginfoArr[index].isInverse=!this.state.imginfoArr[index].isInverse;
+				this.setState({
+					imginfoArr:this.state.imginfoArr
+				});
+			}.bind(this)
+		},
+		componentDidMount:function(){
+			var stageDom=ReactDOM.findDOMNode(this.refs.stage),
+			stageDomW=stageDom.clientWidth,
+			stageDomH=stageDom.clientHeight,
+			halfStageDomH=stageDomH/2,
+			halfStageDomW=stageDomW/2;
+
+			var imgFigure=ReactDOM.findDOMNode(this.refs.imgFigure0),
+			imgFigureW=imgFigure.clientWidth,
+			imgFigureH=imgFigure.clientHeight,
+			halfImgFigureW=imgFigureW/2,
+			halfImgFigureH=imgFigureH/2;
+			this.Const.centerPos={
+				top:halfStageDomH - halfImgFigureH,
+				left:halfStageDomW - halfImgFigureW
+			};
+			this.Const.hRangePos={
+				leftRangeX:[-halfImgFigureW,halfStageDomW-halfImgFigureW*3],
+				rightRangeX:[halfStageDomW+halfImgFigureW,stageDomW-halfImgFigureW],
+				y:[-halfImgFigureH,stageDomH-halfImgFigureH]
+			};
+			this.rearrage(0);
+
+
+
+		},
+		render:function(){
+ 			var imgFigureArr=[]; 
+			imgDatas.forEach(function(value,index){
+				if(!this.state.imginfoArr[index]){
+					this.state.imginfoArr[index]={
+						pos:{
+							top:0,
+							left:0
+						},
+						rotate:0,
+						isCenter:false,
+						isInverse:false
+					}
+				};
+				imgFigureArr.push(<ImgFigure key={index} data={value} info={this.state.imginfoArr[index]} ref={'imgFigure'+index}
+				center={this.center(index)} isCenter={this.state.imginfoArr[index].isCenter } inverse={this.inverse(index)} isInverse={this.state.imginfoArr[index].isInverse } />);
+				}.bind(this));
+				return (
+					<section className="stage" ref="stage">
+						<section>
+							{imgFigureArr}
+						</section>
+					</section>
+				);
+			}
+		});
+ReactDOM.render(
+	<Photowall/>,
+	document.getElementById('photowall')
+	);
+})();
+	</script>
+</body>
+</html>
